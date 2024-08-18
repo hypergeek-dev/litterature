@@ -1,10 +1,10 @@
-// src/components/who.tsx
-import React, { useState, useEffect } from 'react';
-import Pagination from "./pagination"
+// src/components/WhoIsAnAddict.tsx
+import React from 'react';
+import Pagination from './pagination';
 
 type WhoIsAnAddictProps = {
-  textArray?: string[]; 
-  onNextComponent?: () => void; 
+  textArray?: string[];
+  onNextComponent?: () => void;
 };
 
 const WhoIsAnAddict: React.FC<WhoIsAnAddictProps> = ({ textArray, onNextComponent }) => {
@@ -17,20 +17,13 @@ const WhoIsAnAddict: React.FC<WhoIsAnAddictProps> = ({ textArray, onNextComponen
     "Very simply, an addict is a man or woman whose life is controlled by drugs.",
     "We are people in the grip of a continuing and progressive illness whose ends are always the same: jails, institutions and death."
   ];
+
   return (
     <Pagination
-      textArray={defaultTextArray}
-      initialItemsPerPage={3}
-      renderContent={(currentText) => (
-        <div>
-          {currentText.map((paragraph, index) => (
-            <p key={index} className="mb-4 text-lg text-gray-800">
-              {paragraph}
-            </p>
-          ))}
-        </div>
-      )}
+      textArray={textArray || defaultTextArray}
+      onProceed={onNextComponent}
     />
   );
 };
+
 export default WhoIsAnAddict;

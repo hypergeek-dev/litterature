@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import Pagination from "./pagination";
 
 const TwelveTraditions: React.FC = () => {
   const textArray = [
@@ -16,91 +17,25 @@ const TwelveTraditions: React.FC = () => {
     "9. NA, as such, ought never be organised, but we may create service boards or committees directly responsible to those they serve.",
     "10. Narcotics Anonymous has no opinion on outside issues; hence the NA name ought never be drawn into public controversy.",
     "11. Our public relations policy is based on attraction rather than promotion; we need always maintain personal anonymity at the level of press, radio, and films.",
-    "12. Anonymity is the spiritual foundation of all our Traditions, ever reminding us to place principles before personalities."
+    "12. Anonymity is the spiritual foundation of all our Traditions, ever reminding us to place principles before personalities.",
+    "Understanding these Traditions comes slowly over a period of time. We pick up information as we talk to members and visit various groups.",
+    "It usually isn’t until we get involved with service that someone points out that “personal recovery depends on NA unity,” and that unity depends on how well we follow our Traditions.",
+    "The Twelve Traditions of NA are not negotiable. They are the guidelines that keep our Fellowship alive and free.",
+    "By following these guidelines in our dealings with others, and society at large, we avoid many problems.",
+    "That is not to say that our Traditions eliminate all problems. We still have to face difficulties as they arise: communication problems, differences of opinion, internal controversies, and troubles with individuals and groups outside the Fellowship.",
+    "However, when we apply these principles, we avoid some of the pitfalls.",
+    "Many of our problems are like those that our predecessors had to face.", 
+    "Their hard won experience gave birth to the Traditions, and our own experience has shown that these principles are just as valid today as they were when these Traditions were formulated.",
+    "Our Traditions protect us from the internal and external forces that could destroy us. They are truly the ties that bind us together.",
+    "It is only through understanding and application that they work."
   ];
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(3);
-
-  useEffect(() => {
-    const updateItemsPerPage = () => {
-      if (window.innerWidth < 600) {
-        setItemsPerPage(1);
-      } else if (window.innerWidth < 900) {
-        setItemsPerPage(2);
-      } else {
-        setItemsPerPage(3);
-      }
-    };
-
-    updateItemsPerPage();
-    window.addEventListener('resize', updateItemsPerPage);
-
-    return () => window.removeEventListener('resize', updateItemsPerPage);
-  }, []);
-
-  const totalPages = Math.ceil(textArray.length / itemsPerPage);
-
-  const handleClickNext = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-    } else {
-      // Implement the logic to proceed to the next component or stage here
-      console.log("Proceeding to the next component...");
-    }
-  };
-
-  const handleClickPrevious = () => {
-    setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
-  };
-
-  const currentText = textArray.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold text-center mb-6">
-        The Twelve Traditions of NA
-      </h1>
-      <div className="m-8">
-        {currentText.map((paragraph, index) => (
-          <p key={index} className="mb-4 text-lg text-800">
-            {paragraph}
-          </p>
-        ))}
-      </div>
-      <div className="flex flex-col items-center space-y-4">
-        <div className="flex justify-center items-center space-x-4">
-          <button
-            onClick={handleClickPrevious}
-            disabled={currentPage === 1}
-            className="px-4 py-2 bg-gray-300 text-gray-800 rounded disabled:opacity-50"
-          >
-            Previous
-          </button>
-          <span className="text-lg">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={handleClickNext}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-gray-300 text-gray-800 rounded disabled:opacity-50"
-          >
-            {currentPage === totalPages ? 'Next' : 'Next'}
-          </button>
-        </div>
-        {currentPage === totalPages && (
-          <button
-            onClick={handleClickNext}
-            className="px-4 py-2 mt-4 bg-blue-500 text-white rounded"
-          >
-            Proceed to Next Component
-          </button>
-        )}
-      </div>
-    </div>
+    <Pagination
+      textArray={textArray}
+      initialItemsPerPage={3} 
+      nextComponentLabel="Next text" 
+    />
   );
 };
 

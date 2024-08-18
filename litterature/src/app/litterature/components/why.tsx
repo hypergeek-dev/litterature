@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import Pagination from "./pagination"
+import React from 'react';
+import Pagination from './pagination';
 
-const WhyAreWeHere: React.FC = () => {
-  const textArray = [
+type WhyAreWeHereProps = {
+  textArray?: string[];
+  onNextComponent?: () => void;
+};
+
+const WhyAreWeHere: React.FC<WhyAreWeHereProps> = ({ textArray, onNextComponent }) => {
+  const defaultTextArray = [
     "Why are we here?",
     "Before coming to the Fellowship of NA, we could not manage our own lives.",
     "We could not live and enjoy life as other people do.",
@@ -21,20 +26,11 @@ const WhyAreWeHere: React.FC = () => {
     "It can, however, be arrested at some point, and recovery is then possible."
   ];
 
-  
   return (
     <Pagination
-      textArray={textArray}
+      textArray={textArray || defaultTextArray}
       initialItemsPerPage={3}
-      renderContent={(currentText) => (
-        <div>
-          {currentText.map((paragraph, index) => (
-            <p key={index} className="mb-4 text-lg text-gray-800">
-              {paragraph}
-            </p>
-          ))}
-        </div>
-      )}
+      onProceed={onNextComponent}
     />
   );
 };

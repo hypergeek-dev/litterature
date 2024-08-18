@@ -1,41 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import PaginationLayout from './PaginationLayout';
 
-interface PaginationProps {
+interface PaginationControlsProps {
   textArray: string[];
-  initialItemsPerPage: number;
-  onProceed?: () => void; // Optional callback for proceeding
-  renderContent: (currentText: string[]) => JSX.Element;
+  initialItemsPerPage?: number;
+  onProceed?: () => void;
+  nextComponentLabel?: string;
 }
 
-const Pagination: React.FC<PaginationProps> = ({
+const Pagination: React.FC<PaginationControlsProps> = ({
   textArray,
-  initialItemsPerPage,
+  initialItemsPerPage = 4, 
   onProceed,
-  renderContent
+  nextComponentLabel = "Next Component",
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage);
 
-  useEffect(() => {
-    const updateItemsPerPage = () => {
-      if (window.innerWidth < 600) {
-        setItemsPerPage(1);
-      } else if (window.innerWidth < 900) {
-        setItemsPerPage(2);
-      } else {
-        setItemsPerPage(initialItemsPerPage);
-      }
-    };
+  const calculateItemsPerPage = useCallback(() => {
+    let baseItemsPerPage = initialItemsPerPage;
 
-    updateItemsPerPage();
-    window.addEventListener('resize', updateItemsPerPage);
+    // Adjust based on screen size
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 600) {
+      baseItemsPerPage = 3; 
+    } else if (screenWidth < 900) {
+      baseItemsPerPage = 6; 
+    } else {
+      baseItemsPerPage = 8; 
+    }
 
-    return () => window.removeEventListener('resize', updateItemsPerPage);
+    setItemsPerPage(baseItemsPerPage);
   }, [initialItemsPerPage]);
 
-  const title = textArray[0]; // Extract the title
-  const contentArray = textArray.slice(1); // Exclude the title from the paginated content
+  useEffect(() => {
+    calculateItemsPerPage();
+    window.addEventListener('resize', calculateItemsPerPage);
+
+    return () => window.removeEventListener('resize', calculateItemsPerPage);
+  }, [calculateItemsPerPage]);
+
+  const title = textArray[0]; 
+  const contentArray = textArray.slice(1); 
   const totalPages = Math.ceil(contentArray.length / itemsPerPage);
+
+
   const currentText = contentArray.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -45,7 +54,7 @@ const Pagination: React.FC<PaginationProps> = ({
     if (currentPage < totalPages) {
       setCurrentPage(prev => prev + 1);
     } else {
-      handleProceed(); // Calls the internal proceed logic
+      handleProceed();
     }
   };
 
@@ -55,51 +64,23 @@ const Pagination: React.FC<PaginationProps> = ({
 
   const handleProceed = () => {
     if (onProceed) {
-      onProceed(); // Call the passed onProceed function if provided
+      onProceed();
     } else {
-      console.log("Proceeding to the next component...");
-      // Default behavior if no onProceed callback is provided
+      console.log("Proceeding to the next text...");
     }
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold text-center mb-6">
-        {title}
-      </h1>
-      <div className="m-8">
-        {renderContent(currentText)}
-      </div>
-      <div className="flex flex-col items-center space-y-4">
-        <div className="flex justify-center items-center space-x-4">
-          <button
-            onClick={handleClickPrevious}
-            disabled={currentPage === 1}
-            className="px-4 py-2 bg-gray-300 text-gray-800 rounded disabled:opacity-50"
-          >
-            Previous
-          </button>
-          <span className="text-lg">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={handleClickNext}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-gray-300 text-gray-800 rounded disabled:opacity-50"
-          >
-            {currentPage === totalPages ? 'Finish' : 'Next'}
-          </button>
-        </div>
-        {currentPage === totalPages && (
-          <button
-            onClick={handleClickNext}
-            className="px-4 py-2 mt-4 bg-blue-500 text-white rounded"
-          >
-            Proceed to Next Component
-          </button>
-        )}
-      </div>
-    </div>
+    <PaginationLayout
+      title={currentPage === 1 ? title : ""} 
+      currentText={currentText}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onClickPrevious={handleClickPrevious}
+      onClickNext={handleClickNext}
+      onProceed={handleProceed}
+      nextComponentLabel={nextComponentLabel}
+    />
   );
 };
 

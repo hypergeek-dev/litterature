@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import Pagination from "./pagination"
+import React from 'react';
+import Pagination from "./pagination";
+
 const WhatIsNaProgram: React.FC = () => { 
- 
-  const textArray = [
+  const defaultTextArray = [
     "What is the Narcotics Anonymous Programme?",
     "NA is a nonprofit fellowship or society of men and women for whom drugs had become a major problem.",
     "We are recovering addicts who meet regularly to help each other stay clean.",
@@ -23,19 +23,11 @@ const WhatIsNaProgram: React.FC = () => {
   return (
     <Pagination
       textArray={defaultTextArray}
-      initialItemsPerPage={3}
-      renderContent={(currentText) => (
-        <div>
-          {currentText.map((paragraph, index) => (
-            <p key={index} className="mb-4 text-lg text-gray-800">
-              {paragraph}
-            </p>
-          ))}
-        </div>
-      )}
+      nextComponentLabel="Next text" 
     />
   );
 };
+
 const App: React.FC = () => (
   <div>
     <WhatIsNaProgram />

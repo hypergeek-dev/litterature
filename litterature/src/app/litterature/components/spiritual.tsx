@@ -29,7 +29,12 @@ const SpiritualJourney: React.FC = () => {
   const totalPages = Math.ceil(textArray.length / itemsPerPage);
 
   const handleClickNext = () => {
-    setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev));
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    } else {
+      // Implement the logic to proceed to the next component or stage here
+      console.log("Proceeding to the next component...");
+    }
   };
 
   const handleClickPrevious = () => {
@@ -42,22 +47,45 @@ const SpiritualJourney: React.FC = () => {
   );
 
   return (
-    <div>
-      <div>
+    <div className="p-8">
+      <h1 className="text-3xl font-bold text-center mb-6">
+        A Spiritual Journey
+      </h1>
+      <div className="m-8">
         {currentText.map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
+          <p key={index} className="mb-4 text-lg text-gray-800">
+            {paragraph}
+          </p>
         ))}
       </div>
-      <div className="pagination-controls">
-        <button onClick={handleClickPrevious} disabled={currentPage === 1}>
-          Previous
-        </button>
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button onClick={handleClickNext} disabled={currentPage === totalPages}>
-          Next
-        </button>
+      <div className="flex flex-col items-center space-y-4">
+        <div className="flex justify-center items-center space-x-4">
+          <button
+            onClick={handleClickPrevious}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-300 text-gray-800 rounded disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="text-lg">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleClickNext}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-300 text-gray-800 rounded disabled:opacity-50"
+          >
+            {currentPage === totalPages ? 'Next' : 'Next'}
+          </button>
+        </div>
+        {currentPage === totalPages && (
+          <button
+            onClick={handleClickNext}
+            className="px-4 py-2 mt-4 bg-blue-500 text-white rounded"
+          >
+            Proceed to Next Component
+          </button>
+        )}
       </div>
     </div>
   );
@@ -65,9 +93,8 @@ const SpiritualJourney: React.FC = () => {
 
 const App: React.FC = () => (
   <div>
-    <h1>A Spiritual Journey</h1>
     <SpiritualJourney />
   </div>
 );
 
-export default App;
+export default SpiritualJourney;

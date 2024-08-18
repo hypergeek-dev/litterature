@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-
-const WhatIsNaProgram: React.FC = () => {
+import Pagination from "./pagination"
+const WhatIsNaProgram: React.FC = () => { 
+ 
   const textArray = [
     "What is the Narcotics Anonymous Programme?",
     "NA is a nonprofit fellowship or society of men and women for whom drugs had become a major problem.",
@@ -19,66 +20,24 @@ const WhatIsNaProgram: React.FC = () => {
     "We have learned from our group experience that those who keep coming to our meetings regularly stay clean."
   ];
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(3);
-
-  useEffect(() => {
-    const updateItemsPerPage = () => {
-      if (window.innerWidth < 600) {
-        setItemsPerPage(1);
-      } else if (window.innerWidth < 900) {
-        setItemsPerPage(2);
-      } else {
-        setItemsPerPage(3);
-      }
-    };
-
-    updateItemsPerPage();
-    window.addEventListener('resize', updateItemsPerPage);
-
-    return () => window.removeEventListener('resize', updateItemsPerPage);
-  }, []);
-
-  const totalPages = Math.ceil(textArray.length / itemsPerPage);
-
-  const handleClickNext = () => {
-    setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev));
-  };
-
-  const handleClickPrevious = () => {
-    setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
-  };
-
-  const currentText = textArray.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
   return (
-    <div>
-      <div>
-        {currentText.map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
-        ))}
-      </div>
-      <div className="pagination-controls">
-        <button onClick={handleClickPrevious} disabled={currentPage === 1}>
-          Previous
-        </button>
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button onClick={handleClickNext} disabled={currentPage === totalPages}>
-          Next
-        </button>
-      </div>
-    </div>
+    <Pagination
+      textArray={defaultTextArray}
+      initialItemsPerPage={3}
+      renderContent={(currentText) => (
+        <div>
+          {currentText.map((paragraph, index) => (
+            <p key={index} className="mb-4 text-lg text-gray-800">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+      )}
+    />
   );
 };
-
 const App: React.FC = () => (
   <div>
-    <h1>What is the NA Program?</h1>
     <WhatIsNaProgram />
   </div>
 );

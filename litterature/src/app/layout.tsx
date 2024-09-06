@@ -1,8 +1,8 @@
-// src/app/layout.tsx
+
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import Navbar from '../components/navbar'; // Correct the path if needed
+import Navbar from '../components/navbar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,6 +18,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* Add the Font Awesome script here */}
+        <script
+          src="https://kit.fontawesome.com/c4df5125eb.js"
+          crossOrigin="anonymous"
+        ></script>
+      </head>
       <body className={inter.className}>
         <Navbar />
         {children}

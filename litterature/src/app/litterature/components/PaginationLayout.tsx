@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaArrowLeft, FaArrowRight, FaCheck } from 'react-icons/fa';
 
 interface PaginationLayoutProps {
   title: string;
@@ -19,41 +20,42 @@ const PaginationLayout: React.FC<PaginationLayoutProps> = ({
   onClickPrevious,
   onClickNext,
   onProceed,
-  nextComponentLabel
+  nextComponentLabel,
 }) => {
   return (
-    <div className="p-2 md:p-4 lg:p-6">
-      <h1 className="font-bold text-center mb-4 text-xl md:text-2xl lg:text-4xl">{title}</h1>
-      <div>
+    <div className="flex flex-col p-2 box-border">
+      <h1 className="text-center mb-5 text-em font-bold">{title}</h1>
+      <div className="flex-1">
         {currentText.map((paragraph, index) => (
-          <p key={index} className="text-base p-1 md:text-lg lg:text-3xl text-white-800">{paragraph}</p>
+          <p key={index} className="mb-2 text-em">
+            {paragraph}
+          </p>
         ))}
       </div>
-      <div className="flex flex-col items-center space-y-3">
-        <div className="flex justify-center items-center space-x-4">
-          <button
-            onClick={onClickPrevious}
-            disabled={currentPage === 1}
-            className="px-4 py-2 bg-gray-300 text-gray-800 rounded disabled:opacity-50"
-          >
-            Previous
-          </button>
-          <span className="text-base md:text-lg lg:text-xl">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={onClickNext}
-            className="px-4 py-2 bg-gray-300 text-gray-800 rounded"
-          >
-            {currentPage === totalPages ? nextComponentLabel : 'Next'}
-          </button>
-        </div>
-        {currentPage === totalPages && (
+      <div className="flex justify-between items-center">
+        <button
+          onClick={onClickPrevious}
+          disabled={currentPage === 1}
+          className="px-0.5 py-0.5 bg-gray-300 text-gray-800 rounded disabled:opacity-50"
+        >
+          <FaArrowLeft />
+        </button>
+        <span className="text-em">
+          Page {currentPage} of {totalPages}
+        </span>
+        {currentPage === totalPages ? (
           <button
             onClick={onProceed}
-            className="px-4 py-2 mt-4 bg-blue-500 text-white rounded"
+            className="px-0.5 py-0.5 bg-blue-500 text-white rounded"
           >
-            {nextComponentLabel}
+            <FaCheck /> {nextComponentLabel}
+          </button>
+        ) : (
+          <button
+            onClick={onClickNext}
+            className="px-0.5 py-0.5 bg-gray-300 text-gray-800 rounded"
+          >
+            <FaArrowRight />
           </button>
         )}
       </div>

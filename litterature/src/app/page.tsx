@@ -1,5 +1,5 @@
-// src/app/page.tsx
-"use client"; // This marks the component as a Client Component
+
+"use client"; 
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
